@@ -1,0 +1,71 @@
+name: iGaming Fraud Detection CI
+
+# این بخش مشخص می‌کند ربات چه زمانی فعال شود (هنگام push یا pull_request روی شاخه‌های main یا master)
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  run-tests:
+    name: Run Automated Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      # ۱. دانلود کردن کدهای پروژه شما روی سیستم لینوکسی گیت‌هاب
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # ۲. نصب پایتون نسخه ۳.۱۱
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # ۳. نصب تمام پکیج‌های تعریف‌شده در requirements.txt
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # ۴. اجرای تست‌های مسیر نهایی فایل باید دقیقاً این باشد:  
+> **`.github/workflows/ci.yml`**
+
+۴. فایل **`ci.yml`** را با ادیتور (VS Code یا Notepad) باز کرده و کدهای زیر را داخل آن قرار دهید:
+```yaml
+name: iGaming Fraud Detection CI
+
+# این بخش مشخص می‌کند ربات چه زمانی فعال شود (هنگام push یا pull_request روی شاخه‌های main یا master)
+on:
+  push:
+branches: [ main, master ]
+  pull_request:
+branches: [ main, master ]
+
+jobs:
+  run-tests:
+name: Run Automated Tests
+runs-on: ubuntu-latest
+
+steps:
+# ۱. دانلود کردن کدهای پروژه شما روی سیستم لینوکسی گیت‌هاب
+- name: Checkout Code
+uses: actions/checkout@v4
+
+# ۲. نصب پایتون نسخه ۳.۱۱
+- name: Set up Python 3.11
+uses: actions/setup-python@v5
+with:
+python-version: '3.11'
+
+# ۳. نصب تمام پکیج‌های تعریف‌شده در requirements.txt
+- name: Install Dependencies
+run: |
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+
+# ۴. اجرای تست‌های نرم‌افزاری که در فاز ۳ نوشتیم
+- name: Run Unit Tests
+run: |
+python -m pytest -v
